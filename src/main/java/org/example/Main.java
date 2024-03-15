@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.Delayed;
+
+import static org.example.Const.*;
 
 public class Main {
     private static final Scanner inputMenu = new Scanner(System.in);
@@ -19,21 +22,6 @@ public class Main {
         order = Order.getInstance();
         List<String> menuList = Arrays.asList("1","2","3","4","5","6","7","8");
         List<String> menuOption = Arrays.asList("00","01");
-        String menuMessage =
-                """
-                    Silahkan pilih menu makanan minuman:\s
-                    1. Nasi Goreng              | 10.000
-                    2. Mie Goreng               | 10.000
-                    3. Ayam Bali                | 12.000
-                    4. Telur Bali               | 10.000
-                    5. Orak-arik Ayam           | 10.000
-                    6. Orak-arik Telur          |  8.000
-                    7. Es Teh                   |  3.000
-                    8. Es Jeruk                 |  3.000
-                                                        
-                    00. Lihat pesanan dan bayar         
-                    01. Keluar dan batalkan             """;
-
         System.out.println(menuMessage);
         System.out.print("=> ");String userInput = inputMenu.nextLine();
         if (menuList.contains(userInput)) {
@@ -48,10 +36,7 @@ public class Main {
 
     private static void subMenu(String menu) {
         if (Objects.equals(menu, "00")) {
-            int[] orders = order.takeOrder();
-            for (int i=0;i<orders.length;i++) {
-                System.out.println(orders[i]);
-            }
+            showOrderedMenu();
         } else {
             System.out.println("OK");
             System.exit(0);
@@ -74,13 +59,42 @@ public class Main {
         inputMsg.append("=".repeat(30))
                 .append("\n")
                 .append("Silahkan masukkan jumlah pesanan \n")
+                .append("=".repeat(30))
+                .append("\n")
                 .append("+ ")
                 .append(selectedItem);
         System.out.println(inputMsg);
         System.out.print("qty => ");String userInput = inputMenu.nextLine();
-        System.out.println("Jumlah pesanan "+ selectedItem +" adalah " + userInput + " pesanan");
+        System.out.println("=".repeat(30));
+        System.out.println("Konfirmasi pesanan anda");
+        System.out.println("=".repeat(30));
+        System.out.println(userInput + " " + selectedItem + " | " + getMenuPrice(Integer.parseInt(menu)-1, Integer.parseInt(userInput)));
         order.addOrder(Integer.parseInt(menu), Integer.parseInt(userInput));
         System.out.println("-".repeat(30));
         mainMenu();
+    }
+
+    public static int getMenuPrice(int menuId, int qty) {
+        return menuPrice[menuId] * qty;
+    }
+
+    public static void showOrderedMenu() {
+        int[][] item = order.takeOrder();
+        int totalPrice = 0;
+        for (int i=0;i<item[0].length;i++) {
+            if (item[0][i] != 0) {
+                System.out.println(item[0][i] + " " + menuList[i] + " | " + item[1][i]);
+                totalPrice += item[1][i];
+            }
+        }
+        System.out.println("Total =>" + totalPrice + "\n");
+        System.out.println("00. Bayar pesanan");
+        System.out.println("01. Batalkan pesanan");
+        System.out.print("=> "); String userInput = inputMenu.nextLine();
+        if (userInput == "00") {
+            WriteRead.writeFile("Struk tercetak");
+        } else {
+            System.exit(0);
+        }
     }
 }
