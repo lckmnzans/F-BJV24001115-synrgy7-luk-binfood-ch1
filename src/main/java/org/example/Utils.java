@@ -4,15 +4,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class WriteRead {
+public class Utils {
     public static void writeFile(String msg) {
-        String PATH = "./receipt.txt";
+        String PATH = "D://receipt.txt";
         String osName = System.getProperty("os.name").toLowerCase();
 
         if (osName.contains("linux")) {
-            PATH = "/home/lckmnzans/Documents/projects/Java Projects/F-BJV24001115-synrgy7-luk-binfood-ch1/struk.txt";
+            PATH = "/home/lckmnzans/struk.txt";
         } else if (osName.contains("windows")) {
-            PATH = "D://Documents/Docs/struk.txt";
+            PATH = "D://struk.txt";
         }
 
         File file = new File(PATH);

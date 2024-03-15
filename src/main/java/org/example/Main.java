@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.concurrent.Delayed;
 
 import static org.example.Const.*;
 
@@ -59,7 +58,6 @@ public class Main {
         inputMsg.append("=".repeat(30))
                 .append("\n")
                 .append("Silahkan masukkan jumlah pesanan \n")
-                .append("=".repeat(30))
                 .append("\n")
                 .append("+ ")
                 .append(selectedItem);
@@ -91,8 +89,8 @@ public class Main {
         System.out.println("00. Bayar pesanan");
         System.out.println("01. Batalkan pesanan");
         System.out.print("=> "); String userInput = inputMenu.nextLine();
-        if (userInput == "00") {
-            WriteRead.writeFile("Struk tercetak");
+        if (Objects.equals(userInput, "00")) {
+            Utils.writeFile("Struk tercetak");
         } else {
             System.exit(0);
         }
